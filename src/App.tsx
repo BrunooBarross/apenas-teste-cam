@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 import Tesseract from 'tesseract.js';
-
 
 const videoConstraints = {
   width: 1280,
@@ -9,10 +8,10 @@ const videoConstraints = {
   facingMode: "user"
 };
 
-const App = () => {
-  const [image, setImage] = useState(null);
+const App: React.FC = () => {
+  const [image, setImage] = useState<string | null>(null);
   const [text, setText] = useState('');
-  const webcamRef = useRef(null);
+  const webcamRef = useRef<Webcam>(null);
 
   const handleCapture = () => {
     const canvas = webcamRef.current?.getCanvas();
@@ -40,6 +39,7 @@ const App = () => {
     <div>
       <Webcam
         ref={webcamRef}
+        videoConstraints={videoConstraints}
         width={400}
         height={300}
         screenshotFormat="image/png"
