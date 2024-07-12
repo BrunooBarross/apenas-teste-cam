@@ -11,6 +11,7 @@ const videoConstraints = {
 const App: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [text, setText] = useState('');
+  const [isReading, setIsReading] = useState(false);
   const webcamRef = useRef<Webcam>(null);
 
   const handleCapture = () => {
@@ -18,6 +19,7 @@ const App: React.FC = () => {
     if (canvas) {
       const imageData = canvas.toDataURL('image/png');
       setImage(imageData);
+      setIsReading(false); // Habilita o botão "Ler texto" após capturar a foto
     } else {
       console.error('Elemento canvas não encontrado.');
     }
@@ -25,12 +27,14 @@ const App: React.FC = () => {
 
   const handleReadText = async () => {
     if (image) {
+      setIsReading(true); // Desabilita o botão "Ler texto" enquanto lê o texto
       Tesseract.recognize(
         image,
         'por', // Língua do reconhecimento (Português)
         { logger: (m) => console.log(m) } // Logger opcional para ver o progresso
       ).then(({ data: { text } }) => {
         setText(text);
+        setIsReading(false); // Reabilita o botão após a leitura do texto
       });
     }
   };
@@ -45,7 +49,11 @@ const App: React.FC = () => {
         screenshotFormat="image/png"
       />
       <button onClick={handleCapture}>Capturar foto</button>
-      {image && <button onClick={handleReadText}>Ler texto</button>}
+      {image && (
+        <button onClick={handleReadText} disabled={isReading}>
+          Ler texto
+        </button>
+      )}
       {text && <p>{text}</p>}
     </div>
   );
