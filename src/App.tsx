@@ -5,7 +5,7 @@ import Tesseract from 'tesseract.js';
 const videoConstraints = {
   width: 1280,
   height: 720,
-  facingMode: "user"
+  facingMode: { exact: "environment" } // Utiliza a câmera traseira em dispositivos móveis
 };
 
 const App: React.FC = () => {
@@ -40,8 +40,8 @@ const App: React.FC = () => {
       <Webcam
         ref={webcamRef}
         videoConstraints={videoConstraints}
-        width={400}
-        height={300}
+        width="100%" // Ajusta a largura para 100%
+        height="auto" // Ajusta a altura automaticamente
         screenshotFormat="image/png"
       />
       <button onClick={handleCapture}>Capturar foto</button>
